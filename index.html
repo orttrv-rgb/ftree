@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><title>かぞくの木</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root{--bg:#f2f5f4;--card:#fff;--tx:#1d2a2e;--sub:#6b7a7e;--ln:#b7c3c2;--ac:#1f6f68;--acx:#fff;--m:#dce9f7;--f:#fbe1e6;--o:#e8ebea;--hl:#ffe9a3;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#151c1e;--card:#222c2f;--tx:#eef3f2;--sub:#9fb0b2;--ln:#52666a;--ac:#5cc4b8;--acx:#08201d;--m:#26405a;--f:#573040;--o:#34413f;--hl:#6b5a17}}
+:root[data-theme="dark"]{--bg:#151c1e;--card:#222c2f;--tx:#eef3f2;--sub:#9fb0b2;--ln:#52666a;--ac:#5cc4b8;--acx:#08201d;--m:#26405a;--f:#573040;--o:#34413f;--hl:#6b5a17}
+*{box-sizing:border-box}html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--tx);font-family:"Hiragino Sans","Noto Sans JP",system-ui,sans-serif;font-size:16px;background:var(--bg)}
+#app{height:100%;display:flex;flex-direction:column}
+header{padding:10px 14px 8px;background:var(--card);border-bottom:1px solid var(--ln)}
+.r1{display:flex;align-items:center;gap:8px}
+h1{font-size:19px;margin:0;flex:1;letter-spacing:.04em}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+.chip{background:var(--hl);border-radius:20px;padding:8px 14px;font-weight:600;font-size:15px;max-width:60%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ib{width:42px;height:42px;border-radius:50%;background:var(--o);font-size:20px}
+.seg{display:flex;background:var(--o);border-radius:12px;padding:3px;margin-top:8px}
+.seg button{flex:1;padding:10px;border-radius:10px;font-weight:600;color:var(--sub)}
+.seg button.on{background:var(--card);color:var(--ac);box-shadow:0 1px 3px #0003}
+#ban{display:none;background:var(--ac);color:var(--acx);text-align:center;padding:12px;font-weight:700}
+#main{flex:1;overflow:auto;position:relative;-webkit-overflow-scrolling:touch}
+.nd{position:absolute;width:96px;height:58px;border-radius:12px;border:2px solid var(--ln);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;line-height:1.25;padding:2px 4px;overflow:hidden;cursor:pointer}
+.nd b{font-size:14px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nd small{font-size:11px;color:var(--sub);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.m{background:var(--m)}.f{background:var(--f)}.o{background:var(--o)}
+.nd.base{border-color:var(--ac);border-width:3px;box-shadow:0 0 0 4px var(--hl)}
+.nd.base small{color:var(--ac);font-weight:700}
+.nd.pk{animation:pk 1s infinite alternate}@keyframes pk{to{border-color:var(--ac)}}
+.zm{position:fixed;left:14px;bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;gap:8px;z-index:5}
+.zm button,.fab{width:48px;height:48px;border-radius:50%;background:var(--card);box-shadow:0 2px 8px #0004;font-size:22px;font-weight:700}
+.zm button.tx{width:54px;font-size:14px}.fab{position:fixed;right:14px;bottom:calc(16px + env(safe-area-inset-bottom,0px));width:auto;padding:0 20px;border-radius:26px;background:var(--ac);color:var(--acx);font-size:16px;z-index:5}
+.li{display:flex;align-items:center;gap:12px;padding:14px;margin:8px 12px;background:var(--card);border-radius:14px;border-left:8px solid var(--ln);cursor:pointer}
+.li.m{border-color:#6aa3df}.li.f{border-color:#e58aa0}
+.li .t{flex:1;min-width:0}.li b{font-size:17px}.li div small{display:block;color:var(--sub)}
+.tag{background:var(--hl);border-radius:14px;padding:5px 12px;font-weight:700;font-size:14px;white-space:nowrap}
+.gh{padding:14px 16px 0;color:var(--sub);font-weight:700;font-size:14px}
+.bk{position:fixed;inset:0;background:#0007;z-index:20;display:none}
+.sh{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-radius:22px 22px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom,0px));z-index:21;display:none;max-height:88%;overflow:auto}
+.big{font-size:32px;font-weight:800;color:var(--ac);margin:4px 0 2px}
+.cap{color:var(--sub);font-size:14px}
+.btn{display:block;width:100%;padding:14px;border-radius:14px;background:var(--o);font-weight:700;margin-top:10px}
+.btn.p{background:var(--ac);color:var(--acx)}.btn.d{color:#d2453b}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.g2 .btn{margin-top:8px;font-size:14px}
+label{display:block;font-weight:700;margin:14px 0 6px;font-size:14px}
+input,select,textarea{width:100%;font:inherit;font-size:16px;padding:12px;border-radius:12px;border:1.5px solid var(--ln);background:var(--bg);color:var(--tx)}
+.sx{display:flex;gap:8px}.sx button{flex:1;padding:12px;border-radius:12px;background:var(--o);font-weight:700}.sx button.on{background:var(--ac);color:var(--acx)}
+.emp{text-align:center;padding:60px 24px;color:var(--sub)}.emp h2{color:var(--tx)}
+</style></head><body><div id="app">
+<header><div class="r1"><h1>🌳 かぞくの木</h1><button class="chip" id="chip"></button><button class="ib" onclick="menu()">⋯</button></div>
+<div class="seg"><button id="vt" onclick="setView('tree')">家系図</button><button id="vl" onclick="setView('list')">リスト</button></div></header>
+<div id="ban">本人にする人をタップしてください</div>
+<div id="main"></div></div>
+<div class="bk" id="bk" onclick="closeAll()"></div><div class="sh" id="sh"></div>
+<script>
+const KEY='kazoku-tree-v1';
+let S={people:[],base:null,view:'tree',zoom:1,fx:0,fy:0};let pick=false;
+try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const P=id=>S.people.find(p=>p.id===id);
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const uid=()=>'p'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+function bv(p){const d=(p.birth||'').replace(/\D/g,'');if(d.length<4)return null;return+d.slice(0,4)+((+d.slice(4,6)||6)-1)/12+(+d.slice(6,8)||15)/400}
+function fmtB(s){const d=String(s||'').replace(/\D/g,'');if(d.length<4)return'';return d.slice(0,4)+'年'+(d.length>=6?d.slice(4,6)+'月':'')+(d.length>=8?d.slice(6,8)+'日':'')}
+function bin(el){el.value=el.value.replace(/\D/g,'');$('#fbv').textContent=fmtB(el.value)}
+function cmp(a,b){const x=a.ord!=null,y=b.ord!=null;if(x&&y)return a.ord-b.ord;if(x!==y)return x?1:-1;const u=bv(a)??Infinity,v=bv(b)??Infinity;return u===v?0:v-u}
+function toast(m){const t=document.createElement('div');t.textContent=m;t.style.cssText='position:fixed;left:50%;top:90px;transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:10px 18px;border-radius:20px;z-index:50;font-size:14px';document.body.appendChild(t);setTimeout(()=>t.remove(),1900)}
+/* ---- 続柄 ---- */
+function anc(id){const d={[id]:0};let q=[id];while(q.length){const n=[];for(const i of q){const p=P(i);[p.f,p.m].forEach(x=>{if(x&&P(x)&&!(x in d)){d[x]=d[i]+1;n.push(x)}})}q=n}return d}
+function blood(a,b){const A=anc(a.id),B=anc(b.id);let best=null;
+ for(const k in A)if(k in B){const s=A[k]+B[k];if(!best||s<best[0])best=[s,A[k],B[k]]}
+ return best?term(best[1],best[2],b,a):null}
+function term(u,d,b,a){const M=b.sex==='m',F=b.sex==='f',pk=(m,f,o)=>M?m:F?f:o;
+ if(!u&&!d)return'本人';
+ if(!d)return['',pk('父','母','親'),pk('祖父','祖母','祖父母'),pk('曾祖父','曾祖母','曾祖父母'),pk('高祖父','高祖母','高祖父母')][u]||u+'代前の祖先';
+ if(!u)return['',pk('息子','娘','子'),'孫','ひ孫','玄孫'][d]||d+'代後の子孫';
+ if(u===1&&d===1){const x=bv(b),y=bv(a);if(x!=null&&y!=null&&x!==y)return x<y?pk('兄','姉','兄・姉'):pk('弟','妹','弟・妹');return pk('兄弟','姉妹','きょうだい')}
+ if(u===1&&d===2)return pk('甥','姪','甥・姪');
+ if(u===1)return d===3?'甥・姪の子':'甥姪の子孫';
+ if(d===1){if(u===2)return pk('叔父','叔母','おじ・おば');if(u===3)return pk('大叔父','大叔母','大おじ・大おば');return'祖先のきょうだい'}
+ const n=Math.min(u,d)-1,r=u-d,bs=n===1?'いとこ':n===2?'はとこ':'第'+n+'いとこ';
+ return r===0?bs:bs+(r>0?'の親世代':'の子世代')}
+const IN={'父':'義父','母':'義母','兄':'義兄','姉':'義姉','弟':'義弟','妹':'義妹'};
+const ALT={'父':['お父さん','パパ','お父様'],'母':['お母さん','ママ','お母様'],'祖父':['おじいちゃん','じいじ'],'祖母':['おばあちゃん','ばあば'],'曾祖父':['ひいおじいちゃん'],'曾祖母':['ひいおばあちゃん'],'兄':['お兄さん','兄さん'],'姉':['お姉さん','姉さん'],'弟':['弟さん'],'妹':['妹さん'],'兄弟':['兄または弟'],'姉妹':['姉または妹'],'息子':['せがれ','子'],'娘':['子'],'孫':['まご'],'ひ孫':['曾孫'],'玄孫':['やしゃご'],'叔父':['伯父（親より年上の場合）','おじさん'],'叔母':['伯母（親より年上の場合）','おばさん'],'大叔父':['大伯父（祖父母より年上の場合）'],'大叔母':['大伯母（祖父母より年上の場合）'],'甥':['おいっ子'],'姪':['めいっ子'],'いとこ':['従兄弟（男性）','従姉妹（女性）'],'はとこ':['再従兄弟（男性）','再従姉妹（女性）'],'夫':['旦那','主人','配偶者'],'妻':['奥さん','家内','配偶者'],'義父':['配偶者の父','お義父さん'],'義母':['配偶者の母','お義母さん'],'義兄':['お義兄さん'],'義姉':['お義姉さん'],'義弟':['義理の弟'],'義妹':['義理の妹'],'甥・姪の子':['姪孫（てっそん）']};
+function altHtml(r){const a=r&&ALT[r];return a?`<div class="cap" style="font-size:15px;margin-bottom:4px">他の呼び方: ${a.join('、')}</div>`:''}
+function rel(a,b){if(a.id===b.id)return'本人';
+ if(a.sp===b.id)return b.sex==='m'?'夫':b.sex==='f'?'妻':'配偶者';
+ let t=blood(a,b);if(t)return t;
+ const sa=a.sp&&P(a.sp),sb=b.sp&&P(b.sp);
+ if(sa){t=blood(sa,b);if(t)return IN[t]||'配偶者の'+t}
+ if(sb){t=blood(a,sb);if(t){const M=b.sex==='m',F=b.sex==='f';
+  if(t==='兄'||t==='姉')return M?'義兄':F?'義姉':'義兄・義姉';
+  if(t==='弟'||t==='妹')return M?'義弟':F?'義妹':'義弟・義妹';
+  if(/叔父|叔母/.test(t))return F?'叔母(義理)':'叔父(義理)';
+  return t+'の'+(M?'夫':F?'妻':'配偶者')}}
+ if(sa&&sb){t=blood(sa,sb);if(t)return'配偶者の'+t+'の配偶者'}
+ return null}
+/* ---- 家系図レイアウト ---- */
+const NW=96,NH=58,GX=16,CG=10,RY=104;
+function layout(nf){const pp=S.people,gen={},comp={};let cid=0;
+ pp.forEach(p=>{if(p.id in gen)return;gen[p.id]=0;comp[p.id]=cid;const q=[p.id];
+  while(q.length){const i=q.shift(),x=P(i),nb=[];
+   [x.f,x.m].forEach(y=>y&&P(y)&&nb.push([y,-1]));pp.forEach(c=>{if(c.f===i||c.m===i)nb.push([c.id,1])});if(x.sp&&P(x.sp))nb.push([x.sp,0]);
+   nb.forEach(([y,dg])=>{if(!(y in gen)){gen[y]=gen[i]+dg;comp[y]=cid;q.push(y)}})}cid++});
+ const mn={};pp.forEach(p=>{mn[comp[p.id]]=Math.min(mn[comp[p.id]]??99,gen[p.id])});
+ const unit={},units=[];
+ pp.forEach(p=>{if(unit[p.id])return;const s=p.sp&&P(p.sp),m=s&&!unit[s.id]?[p,s]:[p];
+  if(m.length>1&&m[0].sex==='m'&&m[1].sex!=='m')m.reverse();if(m.length>1&&m[0].sw)m.reverse();const u={m,seen:0};m.forEach(x=>unit[x.id]=u);units.push(u)});
+ const kidsOf=u=>{const r=[];pp.filter(c=>u.m.some(x=>c.f===x.id||c.m===x.id)).sort(cmp).forEach(c=>{const k=unit[c.id];if(!k.seen&&!r.includes(k))r.push(k)});return r};
+ function measure(u){u.seen=1;u.k=[];for(const k of kidsOf(u))if(!k.seen){measure(k);u.k.push(k)}
+  u.nw=u.m.length*NW+(u.m.length-1)*CG;u.kw=u.k.reduce((s,k)=>s+k.w,0)+GX*Math.max(0,u.k.length-1);u.w=Math.max(u.nw,u.kw)}
+ const pos={};
+ function place(u,left){u.cx=left+u.w/2;let x=left+(u.w-u.kw)/2;u.k.forEach(k=>{place(k,x);x+=k.w+GX});
+  u.m.forEach((p,i)=>pos[p.id]={x:u.cx-u.nw/2+i*(NW+CG),y:(gen[p.id]-mn[comp[p.id]])*RY+12})}
+ const hasPar=u=>u.m.some(x=>(x.f&&P(x.f))||(x.m&&P(x.m)));
+ let left=12;const run=u=>{if(u.seen)return;measure(u);place(u,left);left+=u.w+GX*2};
+ units.filter(u=>!hasPar(u)).sort((a,b)=>cmp(a.m[0],b.m[0])).forEach(run);units.forEach(run);
+ let H=0;for(const k in pos)H=Math.max(H,pos[k].y+NH);
+ const W=left+12;if(!nf)for(const k in pos){if(S.fx)pos[k].x=W-pos[k].x-NW;if(S.fy)pos[k].y=H+12-NH-pos[k].y}
+ return{pos,W,H:H+24}}
+/* ---- 描画 ---- */
+function base(){return S.base&&P(S.base)}
+function tagOf(p){const b=base();if(!b)return fmtB(p.birth)?fmtB(p.birth).slice(0,5)+'生':'';const r=rel(b,p);return r?esc(r):'—'}
+function render(){
+ const b=base(),mn=$('#main'),sl=mn.scrollLeft,st=mn.scrollTop;
+ $('#chip').textContent=b?'本人: '+b.name+' ▼':'本人を選ぶ';
+ $('#vt').className=S.view==='tree'?'on':'';$('#vl').className=S.view==='list'?'on':'';
+ $('#ban').style.display=pick?'block':'none';
+ if(!S.people.length){mn.innerHTML='<div class="emp"><h2>まだ誰も登録されていません</h2><p>まずご自身を登録しましょう。<br>そこから親・配偶者・子を追加できます。</p><button class="btn p" onclick="openForm()">最初の1人を登録する</button></div>';return}
+ let h='';
+ if(S.view==='tree'){const L=layout(),z=S.zoom;let svg='';
+  const mid=p=>({x:p.x+NW/2,y:p.y+NH/2});
+  S.people.forEach(c=>{const f=P(c.f)&&L.pos[c.f],m=P(c.m)&&L.pos[c.m],q=L.pos[c.id];if(!q)return;
+   let ax,ay;if(f&&m){ax=(f.x+m.x)/2+NW/2;ay=f.y+NH/2}else if(f||m){const p=f||m;ax=p.x+NW/2;ay=S.fy?p.y:p.y+NH}else return;
+   const cy=S.fy?q.y+NH:q.y,my=S.fy?cy+20:cy-20;svg+=`<path d="M${ax} ${ay}V${my}H${q.x+NW/2}V${cy}" fill="none" stroke="var(--ln)" stroke-width="2.5"/>`;});
+  S.people.forEach(p=>{if(p.sp&&p.id<p.sp&&L.pos[p.sp]){const a=L.pos[p.id],c=L.pos[p.sp],l=a.x<c.x?a:c,r=a.x<c.x?c:a;svg+=`<line x1="${l.x+NW}" x2="${r.x}" y1="${l.y+NH/2}" y2="${r.y+NH/2}" stroke="var(--ac)" stroke-width="4"/>`}});
+  const nodes=S.people.map(p=>{const q=L.pos[p.id];return`<div class="nd ${p.sex||'o'} ${p.id===S.base?'base':''} ${pick?'pk':''}" data-id="${p.id}" style="left:${q.x}px;top:${q.y}px"><b>${esc(p.name)}</b><small>${tagOf(p)}</small></div>`}).join('');
+  h=`<div style="width:${L.W*z}px;height:${(L.H+80)*z}px"><div style="position:relative;width:${L.W}px;height:${L.H}px;transform:scale(${z});transform-origin:0 0"><svg width="${L.W}" height="${L.H}" style="position:absolute;left:0;top:0">${svg}</svg>${nodes}</div></div>
+  <div class="zm"><button onclick="zoom(-.15)">−</button><button onclick="zoom(.15)">＋</button><button class="tx" onclick="flip('fy')">上下</button><button class="tx" onclick="flip('fx')">左右</button></div>`;
+ }else{
+  const g=layout(1),pp=[...S.people].sort((x,y)=>(g.pos[x.id].y-g.pos[y.id].y)||((bv(x)||9999)-(bv(y)||9999)));let last=-1;
+  pp.forEach(p=>{const y=g.pos[p.id].y;if(y!==last){h+=`<div class="gh">${Math.round((y-12)/RY)+1}段目</div>`;last=y}
+   h+=`<div class="li ${p.sex||'o'}" data-id="${p.id}"><div class="t"><b>${esc(p.name)}</b><small>${esc(fmtB(p.birth))}${p.note?' '+esc(p.note.slice(0,20)):''}</small></div>${b?`<span class="tag">${tagOf(p)}</span>`:''}</div>`});
+  h+='<div style="height:90px"></div>'}
+ mn.innerHTML=h+'<button class="fab" onclick="openForm()">＋ 追加</button>';
+ mn.scrollLeft=sl;mn.scrollTop=st;
+ if(!render.first&&S.view==='tree'){render.first=1;const n=b&&mn.querySelector('.base');if(n)mn.scrollLeft=n.offsetLeft*S.zoom-mn.clientWidth/2+50;else mn.scrollLeft=(mn.scrollWidth-mn.clientWidth)/2}}
+function zoom(d){S.zoom=Math.min(1.6,Math.max(.4,S.zoom+d));save();render()}
+function setView(v){S.view=v;save();render()}
+$('#main').addEventListener('click',e=>{const n=e.target.closest('[data-id]');if(!n)return;const id=n.dataset.id;
+ if(pick){S.base=id;pick=false;save();render();return}sheet(id)});
+$('#chip').onclick=()=>{if(!S.people.length)return;pick=true;closeAll();render()};
+/* ---- シート ---- */
+function closeAll(){$('#bk').style.display='none';$('#sh').style.display='none'}
+function open_(h){$('#sh').innerHTML=h;$('#sh').style.display='block';$('#bk').style.display='block'}
+function sheet(id){const p=P(id),b=base();let top;
+ if(b&&b.id!==id){const r=rel(b,p);top=`<div class="cap">${esc(b.name)}さんから見て</div><div class="big">${r?esc(r):'つながりを特定できません'}</div>${altHtml(r)}<div class="cap">${esc(p.name)}さん</div>${r?'':'<div class="cap">親・配偶者の登録を追加すると表示されます</div>'}`}
+ else if(b)top=`<div class="big">本人</div><div class="cap">${esc(p.name)}さん（基準の人）</div>`;
+ else top=`<div class="big" style="font-size:26px">${esc(p.name)}さん</div><div class="cap">「本人にする」を押すと、全員との関係が表示されます</div>`;
+ const extra=(p.birth?`<div class="cap" style="margin-top:8px">生年月日: ${esc(fmtB(p.birth))}</div>`:'')+(p.note?`<div class="cap">メモ: ${esc(p.note)}</div>`:'');
+ open_(top+extra+`<button class="btn p" onclick="setBase('${id}')">${b&&b.id===id?'本人を解除':'この人を本人にする'}</button>
+ <div class="g2"><button class="btn" onclick="addRel('${id}','par')">＋ 親を追加</button><button class="btn" onclick="addRel('${id}','sp')">＋ 配偶者を追加</button><button class="btn" onclick="addRel('${id}','ch')">＋ 子を追加</button><button class="btn" onclick="addRel('${id}','sib')">＋ 兄弟姉妹を追加</button><button class="btn" onclick="moveSib('${id}',-1)">◀ 左へ</button><button class="btn" onclick="moveSib('${id}',1)">右へ ▶</button>${p.sp?`<button class="btn" onclick="swapSp('${id}')">夫婦の左右を入替</button>`:''}<button class="btn" onclick="openForm('${id}')">✎ 編集</button></div>`)}
+function setBase(id){S.base=S.base===id?null:id;save();closeAll();render()}
+/* ---- 入力フォーム ---- */
+let FS='';
+function opts(sel,ex){return'<option value="">（なし）</option>'+S.people.filter(x=>x.id!==ex).map(x=>`<option value="${x.id}" ${x.id===sel?'selected':''}>${esc(x.name)}</option>`).join('')}
+function openForm(id,pre,cb){const p=id?P(id):Object.assign({name:'',sex:'',birth:'',note:'',f:'',m:'',sp:''},pre||{});FS=p.sex||'';openForm.cb=cb;openForm.id=id||null;
+ open_(`<div class="big" style="font-size:22px;color:var(--tx)">${id?'情報を編集':'親族を追加'}</div>
+ <label>名前</label><input id="fn" value="${esc(p.name)}" placeholder="例: 山田 太郎">
+ <label>性別</label><div class="sx" id="fx"><button data-v="m">男性</button><button data-v="f">女性</button><button data-v="">未設定</button></div>
+ <label>生年月日（数字のみ）</label><input id="fb" value="${esc((p.birth||'').replace(/\D/g,''))}" placeholder="例: 19950128" inputmode="numeric" maxlength="8" oninput="bin(this)"><div class="cap" id="fbv" style="margin-top:4px">${fmtB(p.birth)}</div>
+ <label>父</label><select id="ff">${opts(p.f,id)}</select><label>母</label><select id="fm">${opts(p.m,id)}</select>
+ <label>配偶者</label><select id="fs">${opts(p.sp,id)}</select>
+ <label>メモ</label><input id="fo" value="${esc(p.note)}" placeholder="例: 長野在住">
+ <button class="btn p" onclick="saveForm()">保存する</button>${id?`<button class="btn d" onclick="del('${id}')">この人を削除</button>`:''}<button class="btn" onclick="closeAll()">キャンセル</button>`);
+ const fx=$('#fx');const mark=()=>fx.querySelectorAll('button').forEach(b=>b.className=b.dataset.v===FS?'on':'');mark();
+ fx.onclick=e=>{const b=e.target.closest('button');if(b){FS=b.dataset.v;mark()}}}
+function link(a,b){if(!a||!b)return;const A=P(a),B=P(b);[A,B].forEach(x=>{const o=x.sp&&P(x.sp);if(o&&o.sp===x.id&&o.id!==(x===A?b:a))o.sp=''});A.sp=b;B.sp=a}
+function saveForm(){const name=$('#fn').value.trim();if(!name){$('#fn').focus();$('#fn').style.borderColor='#d2453b';return}
+ let p=openForm.id?P(openForm.id):{id:uid()};
+ Object.assign(p,{name,sex:FS,birth:$('#fb').value.replace(/\D/g,''),note:$('#fo').value.trim(),f:$('#ff').value,m:$('#fm').value});
+ if(!openForm.id){S.people.push(p);if(!S.base&&S.people.length===1)S.base=p.id}
+ if(openForm.pre){Object.assign(p,{})}
+ const sp=$('#fs').value;if(p.sp&&p.sp!==sp){const o=P(p.sp);if(o&&o.sp===p.id)o.sp=''}p.sp=sp;if(sp)link(p.id,sp);
+ if(openForm.cb)openForm.cb(p);save();closeAll();render()}
+function ask(msg,fn){ask.fn=fn;open_(`<div class="big" style="font-size:20px;color:var(--tx)">${msg}</div><button class="btn d" onclick="ask.fn()">はい、実行する</button><button class="btn" onclick="closeAll()">やめる</button>`)}
+function del(id){const p=P(id);ask(esc(p.name)+'さんを削除しますか？',()=>{S.people=S.people.filter(x=>x.id!==id);S.people.forEach(x=>{['f','m','sp'].forEach(k=>{if(x[k]===id)x[k]=''})});if(S.base===id)S.base=null;save();closeAll();render()})}
+function addRel(id,k){const p=P(id);
+ if(k==='par'){const isF=!p.f;openForm(null,{sex:isF?'m':'f'},n=>{if(isF)p.f=n.id;else p.m=n.id;const o=P(isF?p.m:p.f);if(o&&!o.sp&&!n.sp)link(o.id,n.id)})}
+ else if(k==='sp')openForm(null,{sex:p.sex==='m'?'f':p.sex==='f'?'m':'',sp:id});
+ else if(k==='sib'){if(!p.f&&!p.m){open_(`<div class="big" style="font-size:20px;color:var(--tx)">先に親を登録してください</div><div class="cap">兄弟姉妹は「同じ親」でつながります。${esc(p.name)}さんの親を追加すると、兄弟姉妹も追加できます。</div><button class="btn p" onclick="addRel('${id}','par')">親を追加する</button><button class="btn" onclick="closeAll()">やめる</button>`);return}openForm(null,{f:p.f,m:p.m})}
+ else{const pre={};if(p.sex==='f'){pre.m=p.id;pre.f=p.sp||''}else{pre.f=p.id;pre.m=p.sp||''}openForm(null,pre)}}
+function flip(k){S[k]=S[k]?0:1;save();render()}
+function moveSib(id,dir){const p=P(id),g=S.people.filter(c=>c.f===p.f&&c.m===p.m).sort(cmp);const i=g.indexOf(p),j=i+(S.fx?-dir:dir);
+ if(g.length<2){toast('同じ親の兄弟姉妹がいません');return}if(j<0||j>=g.length){toast(dir<0?'これ以上左へ動かせません':'これ以上右へ動かせません');return}
+ [g[i],g[j]]=[g[j],g[i]];g.forEach((c,k)=>c.ord=k);save();closeAll();render()}
+function swapSp(id){const p=P(id),o=P(p.sp),v=!p.sw;p.sw=v;if(o)o.sw=v;save();closeAll();render()}
+/* ---- バックアップ ---- */
+function menu(){open_(`<div class="big" style="font-size:22px;color:var(--tx)">データの保存と共有</div><div class="cap">このデータはこの端末のブラウザ内に保存されます。親族に渡す・機種変更時は、下の文字列をコピーして送り、受け取った側が貼り付けて復元します。</div>
+ <label>バックアップ / 復元用データ</label><textarea id="bk2" rows="5">${esc(JSON.stringify({people:S.people,base:S.base}))}</textarea>
+ <button class="btn" onclick="$('#bk2').select();document.execCommand('copy')">コピーする</button><button class="btn p" onclick="restore()">貼り付けた内容で復元する</button><button class="btn d" onclick="ask('全データを消去します。よろしいですか？',()=>{S.people=[];S.base=null;save();closeAll();render()})">全データを消去</button><button class="btn" onclick="closeAll()">閉じる</button>`)}
+function restore(){let d;try{d=JSON.parse($('#bk2').value);if(!Array.isArray(d.people))throw 0}catch(e){$('#bk2').style.borderColor='#d2453b';$('#bk2').value='データを読み取れませんでした。コピーした文字列を貼り付けてください。';return}
+ ask('現在のデータを上書きして復元します。よろしいですか？',()=>{S.people=d.people;S.base=d.base||null;save();closeAll();render()})}
+render();
+</script></body></html>
